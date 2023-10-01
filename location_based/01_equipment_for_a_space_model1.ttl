@@ -1,0 +1,70 @@
+@prefix bacnet: <http://data.ashrae.org/bacnet/2020#> .
+@prefix brick: <https://brickschema.org/schema/Brick#> .
+@prefix : <urn:ex#> .
+@prefix meta: <https://meta.com#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ref: <https://brickschema.org/schema/Brick/ref#> .
+@prefix rnd: <http://switch.com/rnd#> .
+@prefix switch: <https://switchautomation.com/schemas/BrickExtension#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+:floor_1 a brick:Floor ;
+    brick:hasPart :cubicle_working_space ;
+    brick:isFedBy :vav_3, :vav_4 ;
+    brick:isLocationOf :vav_3, :vav_4, :floor_damper_1 .
+
+:cubicle_working_space a brick:Space ;
+    brick:hasPart :open_plan_working_space ;
+    brick:isPartOf :floor_1 ;
+    brick:isFedBy :vav_1, :vav_2 ;
+    brick:isLocationOf :fcu_1, :vav_1, :vav_2 .
+
+:open_plan_working_space a brick:Space ;
+    brick:hasPart :hot_desk_space ;
+    brick:isPartOf :cubicle_working_space ;
+    brick:isFedBy :fcu_1 .
+
+:hot_desk_space a brick:Space ;
+    brick:isPartOf :open_plan_working_space ;
+    brick:isFedBy :fcu_2 .
+
+:fcu_1 a brick:Fan_Coil_Unit ;
+    brick:feeds :open_plan_working_space ;
+    brick:hasLocation :cubicle_working_space .
+
+:fcu_2 a brick:Fan_Coil_Unit ;
+    brick:feeds :hot_desk_space ;
+    brick:hasLocation :floor_1 .
+
+:ahu_1 a brick:AHU ;
+    brick:feeds :vav_1, :vav_2 .
+
+:ahu_2 a brick:AHU ;
+    brick:feeds :floor_damper_1 .
+
+:floor_damper_1 a brick:Damper ;
+    brick:feeds :vav_3, :vav_3 ;
+    brick:isFedBy :ahu_2 ;
+    brick:hasLocation :floor_1 .
+
+:vav_1 a brick:Variable_Air_Volume_Box ;
+    brick:feeds :cubicle_working_space ;
+    brick:isFedBy :ahu_1 ;
+    brick:hasLocation :cubicle_working_space .
+
+:vav_2 a brick:Variable_Air_Volume_Box ;
+    brick:feeds :cubicle_working_space ;
+    brick:isFedBy :ahu_1 ;
+    brick:hasLocation :cubicle_working_space .
+
+:vav_3 a brick:Variable_Air_Volume_Box ;
+    brick:feeds :floor_1 ;
+    brick:isFedBy :floor_damper_1 ;
+    brick:hasLocation :floor_1 .
+
+:vav_4 a brick:Variable_Air_Volume_Box ;
+    brick:feeds :floor_1 ;
+    brick:isFedBy :floor_damper_1 ;
+    brick:hasLocation :floor_1 .
